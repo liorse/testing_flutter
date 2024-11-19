@@ -80,6 +80,10 @@ class ScoreTrackerState extends State<ScoreTracker> {
 
   @override
   Widget build(BuildContext context) {
+    // Sort players by score in descending order
+    List<String> sortedPlayers = players.toList()
+      ..sort((a, b) => scores[b]!.compareTo(scores[a]!));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Score Tracker'),
@@ -91,31 +95,28 @@ class ScoreTrackerState extends State<ScoreTracker> {
             'Player Scores',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: resetTournament,
             child: const Text('Start New Tournament'),
           ),
-          const SizedBox(height: 20),
           Expanded(
             child: GridView.count(
               crossAxisCount: 2,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(10.0),
               children: players.map((player) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: ElevatedButton(
                     onPressed: () => awardPoints(player),
                     style: ElevatedButton.styleFrom(
-                      textStyle: const TextStyle(fontSize: 18),
+                      textStyle: const TextStyle(fontSize: 14),
                       backgroundColor: winnersOrder.contains(player)
                           ? Colors.grey
                           : Colors.blue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      elevation: 5,
+                      elevation: 3,
                       shadowColor: Colors.black,
                     ),
                     child: Text(
@@ -127,12 +128,31 @@ class ScoreTrackerState extends State<ScoreTracker> {
               }).toList(),
             ),
           ),
-          const SizedBox(height: 20),
+          Flexible(
+            child: SingleChildScrollView(
+              child: DataTable(
+                columnSpacing: 10.0, // Reduced column spacing
+                horizontalMargin: 5.0, // Reduced horizontal margin
+                dataRowHeight: 30.0, // Reduced row height
+                columns: const [
+                  DataColumn(label: Text('Player')),
+                  DataColumn(label: Text('Score')),
+                ],
+                rows: sortedPlayers.map((player) {
+                  return DataRow(
+                    cells: [
+                      DataCell(Text(player)),
+                      DataCell(Text(scores[player].toString())),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
           ElevatedButton(
             onPressed: resetScores,
             child: const Text('Reset Scores'),
           ),
-          const SizedBox(height: 20),
         ],
       ),
     );
