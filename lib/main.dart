@@ -132,36 +132,42 @@ class ScoreTrackerState extends State<ScoreTracker> {
               }).toList(),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SingleChildScrollView(
-                  child: DataTable(
-                    columnSpacing: 10.0, // Reduced column spacing
-                    horizontalMargin: 5.0, // Reduced horizontal margin
-                    dataRowHeight: 30.0, // Reduced row height
-                    columns: const [
-                      DataColumn(label: Text('Player')),
-                      DataColumn(label: Text('Score')),
-                    ],
-                    rows: sortedPlayers.map((player) {
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(player)),
-                          DataCell(Text(scores[player].toString())),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: resetScores,
-                  child: const Text('Reset Scores'),
-                ),
+          const SizedBox(height: 10), // Add some space between the grid and the table
+          SingleChildScrollView(
+            child: DataTable(
+              columnSpacing: 10.0, // Reduced column spacing
+              horizontalMargin: 5.0, // Reduced horizontal margin
+              dataRowHeight: 30.0, // Reduced row height
+              columns: const [
+                DataColumn(label: Text('Player')),
+                DataColumn(label: Text('Score')),
+                DataColumn(label: Text('Standing')),
               ],
+              rows: sortedPlayers.map((player) {
+                bool isFirst = sortedPlayers.indexOf(player) == 0;
+                return DataRow(
+                  cells: [
+                    DataCell(Text(
+                      player,
+                      style: isFirst ? const TextStyle(fontWeight: FontWeight.bold) : null,
+                    )),
+                    DataCell(Text(
+                      scores[player].toString(),
+                      style: isFirst ? const TextStyle(fontWeight: FontWeight.bold) : null,
+                    )),
+                    DataCell(Text(
+                      places[player] ?? '',
+                      style: isFirst ? const TextStyle(fontWeight: FontWeight.bold) : null,
+                    )),
+                  ],
+                );
+              }).toList(),
             ),
+          ),
+          const SizedBox(height: 10), // Add some space between the table and the button
+          ElevatedButton(
+            onPressed: resetScores,
+            child: const Text('Reset Scores'),
           ),
         ],
       ),
