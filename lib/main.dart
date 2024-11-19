@@ -132,8 +132,10 @@ class ScoreTrackerState extends State<ScoreTracker> {
               }).toList(),
             ),
           ),
-          Flexible(
+          Align(
+            alignment: Alignment.bottomCenter,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SingleChildScrollView(
                   child: DataTable(
