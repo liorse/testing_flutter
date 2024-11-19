@@ -84,6 +84,8 @@ class ScoreTrackerState extends State<ScoreTracker> {
     List<String> sortedPlayers = players.toList()
       ..sort((a, b) => scores[b]!.compareTo(scores[a]!));
 
+    bool allPlayersDepressed = winnersOrder.length == players.length;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Score Tracker'),
@@ -97,7 +99,7 @@ class ScoreTrackerState extends State<ScoreTracker> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           ElevatedButton(
-            onPressed: resetTournament,
+            onPressed: allPlayersDepressed ? resetTournament : null,
             child: const Text('Start New Tournament'),
           ),
           Expanded(
